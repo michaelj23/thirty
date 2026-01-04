@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Form from "next/form";
+import { saveTeam } from '@/app/actions';
 
 export default function Home() {
   return (
@@ -9,7 +10,8 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             Enter your team name
           </h1>
-          <Form action="/search">
+          {/* <Form action="/hunt"> */}
+          <Form action={saveTeam}>
             {/* On submission, the input value will be appended to
                 the URL, e.g. /search?query=abc */}
             <input name="teamname" />
