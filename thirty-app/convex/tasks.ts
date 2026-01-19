@@ -17,8 +17,20 @@ export const addNewTeam = mutation({
     await ctx.db.insert("teams", {
         teamId: args.teamId,
         name: args.teamName,
-        taskClue: "Sample text for the next location clue.",
+        taskClue: "Sample text for the next location clue for team " + args.teamName,
     });
+  },
+});
+
+export const getTeamById = query({
+  args: {
+    teamId: v.number(),
+  },
+  handler: async (ctx, args) => {
+    console.log("Fetching team with ID:", args.teamId);
+    return await ctx.db.query("teams")
+        .filter((q) => q.eq(q.field("teamId"), args.teamId))
+        .first();
   },
 });
 
