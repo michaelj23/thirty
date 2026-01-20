@@ -1,5 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { fast1a32utf } from 'fnv-plus';
 
 export const get = query({
   args: {},
@@ -10,15 +11,22 @@ export const get = query({
 
 export const addNewTeam = mutation({
   args: {
-    teamId: v.number(),
     teamName: v.string(),
   },
   handler: async (ctx, args) => {
+    const id = fast1a32utf(args.teamName);
+    const existingTeam = await ctx.db.query("teams")
+        .filter((q) => q.eq(q.field("teamId"), id))
+        .first();
+    if (existingTeam) {
+        return existingTeam.teamId;
+    }
     await ctx.db.insert("teams", {
-        teamId: args.teamId,
+        teamId: id,
         name: args.teamName,
         taskClue: "Sample text for the next location clue for team " + args.teamName,
     });
+    return id;
   },
 });
 

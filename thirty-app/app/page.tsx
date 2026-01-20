@@ -4,7 +4,6 @@ import Image from "next/image";
 import Form from "next/form";
 import { ReactMutation, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { fast1a32utf } from 'fnv-plus';
 import { redirect } from 'next/navigation';
 // import { useQuery } from "convex/react";
 // import { api } from "../convex/_generated/api";
@@ -45,11 +44,8 @@ async function saveTeam(
     console.warn('No valid team name provided');
     return;
   }
-  // TODO: Add logic to handle when the team already exists.
-  const id = fast1a32utf(teamNameVal);
-  await addNewTeam({
-    teamId: id,
+  const teamId = await addNewTeam({
     teamName: teamNameVal,
   });
-  redirect(`/hunt?teamid=${id}`);
+  redirect(`/hunt?teamid=${teamId}`);
 }
