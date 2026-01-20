@@ -19,7 +19,7 @@ export const addNewTeam = mutation({
         .filter((q) => q.eq(q.field("teamId"), id))
         .first();
     if (existingTeam) {
-        return existingTeam.teamId;
+      return existingTeam.teamId;
     }
     await ctx.db.insert("teams", {
         teamId: id,

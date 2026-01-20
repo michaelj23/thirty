@@ -4,8 +4,24 @@ import Form from "next/form";
 import { api } from "../../convex/_generated/api";
 import { useQuery } from "convex/react";
 import { useSearchParams } from "next/navigation";
+import { useGeolocated } from "react-geolocated";
 
 export default function Hunt() {
+  // Requires HTTPS / secure origin for geolocation to be available.
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+      maximumAge: 10000, // 10 seconds
+      timeout: 5000, // 5 seconds
+    },
+    // userDecisionTimeout: 5000,
+    watchPosition: true,
+  });
+
+  // console.log("Coordinates: ", coords);
+  // console.log("Geolocation Available: ", isGeolocationAvailable);
+  // console.log("Geolocation Enabled: ", isGeolocationEnabled);
+
   const searchParams = useSearchParams();
   const teamId = searchParams.get("teamid");
   console.log("Team ID from URL:", teamId);
@@ -20,6 +36,9 @@ export default function Hunt() {
           <Form action="/hunt">
             {/* On submission, the input value will be appended to
                 the URL, e.g. /search?query=abc */}
+            <div>
+              Your current position is: {coords?.latitude}, {coords?.longitude}
+            </div>
             <div className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
               <button type="submit">Submit</button>
             </div>
@@ -29,3 +48,29 @@ export default function Hunt() {
     </div>
   );
 }
+
+function success(pos: GeolocationPosition) {
+  const crd = pos.coords;
+  console.log("Your current position is: "
+    + crd.latitude + " latitude, " + crd.longitude + " longitude");
+
+  // if (crd.latitude && target.longitude === crd.longitude) {
+  //   console.log("Congratulations, you reached the target");
+  //   navigator.geolocation.clearWatch(id);
+  // }
+}
+
+function error(err: GeolocationPositionError) {
+  console.error(`ERROR(${err.code}): ${err.message}`);
+}
+
+// target = {
+//   latitude: 0,
+//   longitude: 0,
+// };
+
+// options = {
+//   enableHighAccuracy: false,
+//   timeout: 5000,
+//   maximumAge: 0,
+// };
