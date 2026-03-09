@@ -563,10 +563,6 @@ export default function Hunt() {
   const isInsideOverland = turf.booleanContains(turfOverlandDr, turfPoint);
   const isInsideSawyer = turf.booleanContains(turfSawyer, turfPoint);
 
-  // console.log("Coordinates: ", coords);
-  // console.log("Geolocation Available: ", isGeolocationAvailable);
-  // console.log("Geolocation Enabled: ", isGeolocationEnabled);
-
   const searchParams = useSearchParams();
   const teamId = searchParams.get("teamid");
   console.log("Team ID from URL:", teamId);

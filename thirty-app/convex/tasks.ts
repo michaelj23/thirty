@@ -9,6 +9,8 @@ export const get = query({
   },
 });
 
+// TODO: Insert a new cluePath for each team, e.g.
+// ["Sawyer", "CSM", "Ravioli House", etc.]
 export const addNewTeam = mutation({
   args: {
     teamName: v.string(),
